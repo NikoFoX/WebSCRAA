@@ -8,13 +8,12 @@ import re
 class Application(tk.Frame):
     def __init__(self):
         self.mainWindow = tk.Tk()
-        self.mainWindow.geometry("1000x800")
+        #self.mainWindow.geometry("1000x800")
         self.mainWindow.title("WebSCRAA")
-
+        
         self.logger_init()
 
         tk.Frame.__init__(self, self.mainWindow)
-        
 
     def logger_init(self):
         # LOGGER
@@ -39,7 +38,7 @@ class Application(tk.Frame):
 
     def addressButtonAction(self):
         self.multipleTextBox.delete('1.0', tk.END)
-        if not re.match(r"^(http:\/\/)", self.addressInput.get()):
+        if not re.match(r"^(http:\/\/)|^(https:\/\/)", self.addressInput.get()):
             self.addressInput.insert("0", "http://")
         self.multipleTextBox.insert(tk.INSERT, scraper.getSourceCode(self.addressInput.get(), "lxml"))
         self.logMessage("Website scrapped")
@@ -47,28 +46,24 @@ class Application(tk.Frame):
         self.parsedOutputBox.insert(tk.INSERT, scraper.soup.find_all("li"))
         
     def createParseApp(self):
-        # main areas
-        self.upperArea = tk.Frame(self.mainWindow)
-        self.upperArea.pack( side = tk.TOP)
-        self.centerArea = tk.Frame(self.mainWindow)
-        self.centerArea.pack( side = tk.TOP)
-        self.lowerArea = tk.Frame(self.mainWindow)
-        self.lowerArea.pack( side = tk.BOTTOM)
-
-        # upperArea
-        tk.Label(self.upperArea, text="Color theme:").pack(anchor=tk.W)
+        # header, mainArea, footnote
+        self.header = tk.Frame(self.mainWindow)
+        self.header.pack( side = tk.TOP)
+        self.mainArea = tk.Frame(self.mainWindow, borderwidth=10)
+        self.mainArea.pack( side = tk.TOP)
+        self.footnote = tk.Frame(self.mainWindow)
+        self.footnote.pack( side = tk.BOTTOM)
+        # header
+        tk.Label(self.header, text="Color theme:").pack(anchor=tk.W)
         self.radChosen = tk.IntVar()
-        tk.Radiobutton(self.upperArea, text="Light", variable=self.radChosen, value=1, command=self.radThemecolor).pack(side=tk.LEFT)
-        tk.Radiobutton(self.upperArea, text="Dark", variable=self.radChosen, value=2, command=self.radThemecolor).pack(side=tk.RIGHT)
-
-        # centerArea
+        tk.Radiobutton(self.header, text="Light", variable=self.radChosen, value=1, command=self.radThemecolor).pack(side=tk.LEFT)
+        tk.Radiobutton(self.header, text="Dark", variable=self.radChosen, value=2, command=self.radThemecolor).pack(side=tk.RIGHT)
+        # mainArea
         # LEFT SIDE
-        self.leftFrame = tk.Frame(self.centerArea, highlightcolor = "Blue")
+        self.leftFrame = tk.Frame(self.mainArea, highlightcolor = "Blue")
         self.leftFrame.pack( side = tk.LEFT)
-
         self.addressInputLabel = tk.Label(self.leftFrame, text="Input address (URL):")
         self.addressInputLabel.pack(anchor = tk.NW)
-
         self.addressInput = tk.Entry(self.leftFrame)
         self.addressInput.pack(anchor = tk.NW)
         self.addressInput.focus()
@@ -76,7 +71,6 @@ class Application(tk.Frame):
         self.addressButton = tk.Button(self.leftFrame, text="Insert address", fg="green", command=self.addressButtonAction)
         #addressButton.bind('<Return>', addressButtonAction)
         self.addressButton.pack(anchor = tk.NW)
-
         self.outputArea = tk.Frame(self.leftFrame)
         self.outputArea.pack(anchor = tk.S)
         tk.Label(self.outputArea, text="Output:").pack(anchor = tk.NW)
@@ -84,27 +78,24 @@ class Application(tk.Frame):
         self.outputText.pack(anchor = tk.S)
 
         # CENTER SIDE
-        self.centerFrame = tk.Frame(self.centerArea, highlightcolor = "yellow")
+        self.centerFrame = tk.Frame(self.mainArea, highlightcolor = "yellow")
         self.centerFrame.pack( side = tk.LEFT)
-
         self.parsedOutputBox = tk.scrolledtext.ScrolledText(self.centerFrame, width=80, height=50, wrap = tk.WORD)
         self.parsedOutputBox.pack()
 
         # RIGHT SIDE
-        self.rightFrame = tk.Frame(self.centerArea, highlightcolor = "yellow")
+        self.rightFrame = tk.Frame(self.mainArea, highlightcolor = "yellow")
         self.rightFrame.pack( side = tk.RIGHT)
-
         self.multipleTextBox = tk.scrolledtext.ScrolledText(self.rightFrame, width=80, height=50, wrap = tk.WORD)
         self.multipleTextBox.pack()
 
-        # lowerArea
-        self.copyrightLabel = tk.Label(self.lowerArea, text="Website Code Read And Analyse - MrN")
+        # footnote
+        self.copyrightLabel = tk.Label(self.footnote, text="Website Code Read And Analyse - MrN")
         self.copyrightLabel.pack(anchor = tk.NW)
 
     def ParserApp(self):
         self.createParseApp()
         self.mainWindow.mainloop()
-
 
 app = Application()
 app.ParserApp()
