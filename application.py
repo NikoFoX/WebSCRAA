@@ -41,7 +41,7 @@ class Application(tk.Frame):
         self.multipleTextBox.delete('1.0', tk.END)
         if not re.match(r"^(http:\/\/)", self.addressInput.get()):
             self.addressInput.insert("0", "http://")
-        self.multipleTextBox.insert(tk.INSERT, scraper.getSourceCode(self.addressInput.get()))
+        self.multipleTextBox.insert(tk.INSERT, scraper.getSourceCode(self.addressInput.get(), "lxml"))
         self.logMessage("Website scrapped")
         self.parsedOutputBox.delete("1.0", tk.END)
         self.parsedOutputBox.insert(tk.INSERT, scraper.soup.find_all("li"))

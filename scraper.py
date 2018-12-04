@@ -13,12 +13,15 @@ def getSourceCode(url, package="bs"):
         soup = bs.BeautifulSoup(data.content, 'lxml')
         return soup.prettify()
     elif package == "lxml":
-        data = lxml.requests.get(url)
-        return data
+        data = requests.get(url)
+        data = data.content
+        html = lxml.etree.HTML(data)
+        parsed = lxml.etree.tostring(html, pretty_print=True, method="html")
+        return parsed
         
     
-getSourceCode(url)
-parsed = soup.findAll("div")
-print(parsed)
+print(getSourceCode(url, "lxml"))
+#parsed = soup.findAll("div")
+#print(parsed)
 
 
