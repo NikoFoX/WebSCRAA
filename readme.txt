@@ -1,3 +1,5 @@
+! UNFINISHED !
+
 WebSCRAA - Website SourceCode Read And Analyse
 
 Program is a result of self-learning of webscraping website source codes.
